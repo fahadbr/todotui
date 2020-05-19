@@ -2,4 +2,5 @@ build
 tmp
 *.tar
 *.tar.gz
-
+.ccls-cache
+compile_commands.json

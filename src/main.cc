@@ -1,9 +1,16 @@
 #include <iostream>
 #include <ncurses.h>
 
-int main() {
-	//std::cout << "hello world";
+void demo1();
 
+int main() {
+	std::cout << "hello world";
+
+	demo1();
+	return 0;
+}
+
+void demo1() {
 	initscr(); // start curses mode
 	raw(); // line buffering disabled
 	keypad(stdscr, TRUE); // we get F1 F2 etc
@@ -24,6 +31,5 @@ int main() {
 	refresh(); //print it on to the real screen
 	getch(); //wait for user input
 	endwin(); //end curses mode
-
-	return 0;
 }
+
