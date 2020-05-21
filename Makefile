@@ -1,18 +1,15 @@
 
-.PHONY : clean todotui
+.PHONY : clean todotui compile_commands
 
 todotui: build/todotui
 
-build/todotui: CMakeLists.txt src/**.cc
-		mkdir -p build && \
-		cmake . -Bbuild -GNinja && \
+build/todotui: build/CMakeCache.txt
 		cmake --build build/
 
-
-compile_commands.json: CMakeLists.txt
-	cmake . -Bdebug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=YES && \
-		cp debug/compile_commands.json ./ && \
-		rm -Rf debug
+build/CMakeCache.txt: CMakeLists.txt src/**.cpp
+			mkdir -p build && \
+			cmake . -Bbuild -GNinja && \
+			cp build/compile_commands.json ./
 
 clean:
-	rm -Rf build debug
+	rm -Rf build
