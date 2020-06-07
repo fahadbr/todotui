@@ -1,15 +1,17 @@
 
-.PHONY : clean todotui compile_commands
+.PHONY : clean todotui cache
 
-todotui: build/todotui
-
-build/todotui: build/CMakeCache.txt
+todotui: compile_commands.json
 		cmake --build build/
 
-build/CMakeCache.txt: CMakeLists.txt src/**.cpp
+cache: build/CMakeCache.txt
+
+compile_commands.json: build/CMakeCache.txt
+	cp build/compile_commands.json ./
+
+build/CMakeCache.txt: CMakeLists.txt
 			mkdir -p build && \
-			cmake . -Bbuild -GNinja && \
-			cp build/compile_commands.json ./
+			cmake . -Bbuild -GNinja
 
 clean:
 	rm -Rf build

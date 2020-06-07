@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 cmake_policy(SET CMP0079 NEW)
+cmake_policy(SET CMP0076 NEW)
 set(CMAKE_C_COMPILER "/usr/bin/clang")
 set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 set(CMAKE_CXX_STANDARD 17)
@@ -12,6 +13,7 @@ project(todotui VERSION 0.1.0 LANGUAGES CXX)
 
 add_executable(todotui src/main.cpp)
 add_subdirectory(src/ncurses)
+add_subdirectory(src/todotxt)
 
 # add the binary tree to the search path for include files
 # so that we will find TutorialConfig.h

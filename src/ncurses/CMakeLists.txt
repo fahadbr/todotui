@@ -5,4 +5,7 @@ find_package(Curses REQUIRED)
 include_directories( ${CURSES_INCLUDE_DIRS} )
 target_link_libraries( todotui ${CURSES_LIBRARIES} )
 
-#target_sources(todotui)
+target_sources(todotui PRIVATE
+	window.h
+	window.cpp
+)
