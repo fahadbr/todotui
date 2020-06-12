@@ -1,5 +1,5 @@
-#ifndef TODOLIST_H_TFD9B3BW
-#define TODOLIST_H_TFD9B3BW
+#ifndef TODOTXT_ITEM_H
+#define TODOTXT_ITEM_H
 
 #include <fstream>
 #include <string>
@@ -24,7 +24,7 @@ public:
   Item(Item &&) = default;
   Item &operator=(Item &&) = default;
 
-  ~Item();
+  ~Item() = default;
 
   string raw();
   bool complete();
@@ -36,6 +36,8 @@ public:
   unordered_map<string, string> extensions();
 
 private:
+  enum State { kDateCompleted, kPriority, kDateAdded, kBody };
+
   string raw_;
   bool complete_;
   char priority_;
@@ -44,28 +46,12 @@ private:
   string date_completed_;
   string date_added_;
   unordered_map<string, string> extensions_;
+
+  void process_word(const std::string_view, State&);
+  void process_body(const std::string_view);
+  bool process_date(const std::string_view val, string& target_date);
+  void print_string();
 };
-
-class List {
-public:
-  List(const string);
-
-  // ensure no copying
-  List(const List &) = delete;
-  List &operator=(const List &) = delete;
-
-  List(List &&);
-  List &operator=(List &&);
-
-  ~List();
-
-  vector<Item> items();
-
-private:
-  std::fstream handle_;
-  vector<Item> items_;
-};
-
 
 
 } // namespace todo

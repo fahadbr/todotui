@@ -1,4 +1,12 @@
 target_sources(todotui PRIVATE
-	todolist.h
-	todolist.cpp
+	list.h
+	list.cpp
+	item.h
+	item.cpp
+)
+
+target_sources(todotui_test PRIVATE
+	item.h
+	item.cpp
+	item_test.cpp
 )
