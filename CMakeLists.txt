@@ -45,15 +45,12 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
 # target_link_libraries(example gtest_main)
 # add_test(NAME example_test COMMAND example)
 
-add_executable(todotui_test)
-target_link_libraries(todotui_test gtest_main)
-add_test(NAME todotui_test COMMAND todotui_test)
-
 # }}} end googletest
 
 add_executable(todotui src/main.cpp)
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
+enable_testing()
 add_subdirectory(src/ncurses)
 add_subdirectory(src/todotxt)
 

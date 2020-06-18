@@ -11,7 +11,7 @@ public:
   }
 
   Window(int height, int width, int starty, int startx);
-  virtual ~Window();
+  ~Window();
 
   void Refresh();
 
