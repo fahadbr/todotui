@@ -52,7 +52,7 @@ Item::Item(const string rawinput) : raw_{rawinput} {
     delim_pos = rawinput.find_first_of(delim, start_pos);
   }
 
-  //PrintString();
+  // PrintString();
 }
 
 auto Item::ProcessWord(const string_view val, Item::State& loop_state) -> void {
@@ -108,15 +108,36 @@ auto Item::ProcessBody(const std::string_view item) -> void {
 }
 
 auto Item::ProcessDate(const std::string_view val, string& target_date) -> bool {
-  if (val.length() == 10 && val[0] <= '9' && val[0] >= '0' && val[1] <= '9' && val[1] >= '0' && val[2] <= '9' &&
-      val[2] >= '0' && val[3] <= '9' && val[3] >= '0' && val[4] == '-' && val[5] <= '1' && val[5] >= '0' &&
-      val[6] <= '9' && val[6] >= '0' && val[7] == '-' && val[8] <= '3' && val[8] >= '0' && val[9] <= '9' &&
-      val[9] >= '0') {
-    target_date = val;
-    return true;
+  if (val.length() != 10) {
+    return false;
   }
 
-  return false;
+  for (int i = 0; i < val.length(); i++) {
+    switch (i){
+      case 5:
+        if (val[i] < '0' || val[i] > '1') {
+          return false;
+        }
+        break;
+      case 8:
+        if (val[i] < '0' || val[i] > '3') {
+          return false;
+        }
+        break;
+      case 4:
+      case 7:
+        if (val[i] != '-') {
+          return false;
+        }
+        break;
+      default:
+        if (val[i] < '0' || val[i] > '9') {
+          return false;
+        }
+    }
+  }
+  target_date = val;
+  return true;
 }
 
 auto Item::PrintString() -> void {
@@ -141,7 +162,7 @@ auto Item::PrintString() -> void {
   cout << "\n\n";
 }
 
-auto Item::raw() const -> string {
+auto Item::raw() const -> const string& {
   return raw_;
 }
 
@@ -153,22 +174,22 @@ auto Item::priority() const -> char {
   return priority_;
 }
 
-auto Item::contexts() const -> vector<string> {
+auto Item::contexts() const -> const vector<string>& {
   return contexts_;
 }
 
-auto Item::tags() const -> vector<string> {
+auto Item::tags() const -> const vector<string>& {
   return tags_;
 }
 
-auto Item::date_completed() const -> string {
+auto Item::date_completed() const -> const string& {
   return date_completed_;
 }
 
-auto Item::date_added() const -> string {
+auto Item::date_added() const -> const string& {
   return date_added_;
 }
 
-auto Item::extensions() const -> Extensions {
+auto Item::extensions() const -> const Extensions& {
   return extensions_;
 }

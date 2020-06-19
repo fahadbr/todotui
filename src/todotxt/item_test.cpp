@@ -19,7 +19,7 @@ TEST(Item, TestDateAdded) {
 }
 
 TEST(Item, TestDateComplete) {
-  todo::Item test_item{"x 2020-06-12 2020-06-11 2020-06-13 2020-06-14"};
+  todo::Item test_item{"x 2020-06-12 2020-06-11 2020-6-13 2020-6-14"};
   EXPECT_EQ(test_item.complete(), true);
   EXPECT_EQ(test_item.date_completed(), "2020-06-12");
   EXPECT_EQ(test_item.date_added(), "2020-06-11");

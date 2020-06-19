@@ -28,14 +28,14 @@ class Item {
 
   ~Item() = default;
 
-  auto raw() const -> string;
+  auto raw() const -> const string&;
   auto complete() const -> bool;
   auto priority() const -> char;
-  auto contexts() const -> vector<string>;
-  auto tags() const -> vector<string>;
-  auto date_completed() const -> string;
-  auto date_added() const -> string;
-  auto extensions() const -> Extensions;
+  auto contexts() const -> const vector<string>&;
+  auto tags() const -> const vector<string>&;
+  auto date_completed() const -> const string&;
+  auto date_added() const -> const string&;
+  auto extensions() const -> const Extensions&;
 
  private:
   enum State { kDateCompleted, kPriority, kDateAdded, kBody };
