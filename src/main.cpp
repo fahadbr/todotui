@@ -1,16 +1,12 @@
 // #include "ncurses/window.h"
-#include <fstream>
 #include <iostream>
-#include <memory>
-#include <string>
 
 #include "todotxt/list.h"
+#include "ncurses/window.h"
 
-void print_file();
 void print_file_class();
 
 int main() {
-  std::cout << "hello there\n";
   try {
     print_file_class();
   } catch (std::exception& ex) {
@@ -25,5 +21,9 @@ int main() {
 
 void print_file_class() {
   todo::List mainlist{"/data/syncthing/todo/main.todo.txt"};
+  ncurses::DoStuff(mainlist);
+
+  //auto w = NCursesWindow(10, 10, 0, 0);
+  //ncurses::DoMoreStuff(&w);
 }
 

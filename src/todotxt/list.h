@@ -27,7 +27,7 @@ class List {
 
   ~List();
 
-  auto items() const -> vector<Item>;
+  auto items() const -> const vector<Item>&;
 
  private:
   std::fstream handle_;

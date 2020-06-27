@@ -24,7 +24,7 @@ using std::vector;
 List::List(const string& filepath) : handle_{filepath}, items_{} {
   string line;
   while (std::getline(handle_, line)) {
-    if (line.back() == '\r') {
+    if (line.size() > 0 && line.back() == '\r') {
       // cout << "removing carriage return" << '\n';
       line.pop_back();
     }
@@ -47,6 +47,6 @@ List::~List() {
   cout << "destroying list\n";
 }
 
-auto List::items() const -> vector<Item> {
+auto List::items() const -> const vector<Item>& {
   return items_;
 }

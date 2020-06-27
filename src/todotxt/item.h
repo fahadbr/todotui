@@ -1,15 +1,12 @@
 #ifndef TODOTXT_ITEM_H
 #define TODOTXT_ITEM_H
 
-#include <fstream>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 namespace todo {
 
 using std::string;
-using std::unordered_map;
 using std::vector;
 
 class Item {
@@ -35,6 +32,10 @@ class Item {
   auto tags() const -> const vector<string>&;
   auto date_completed() const -> const string&;
   auto date_added() const -> const string&;
+  auto due_date() const -> const string&;
+  auto threshold_date() const -> const string&;
+  auto hidden() const -> bool;
+  auto recurrance() const -> const string&;
   auto extensions() const -> const Extensions&;
 
  private:
@@ -47,6 +48,10 @@ class Item {
   vector<string> tags_;
   string         date_completed_;
   string         date_added_;
+  string         due_date_;
+  string         threshold_date_;
+  bool           hidden_;
+  string         recurrance_;
   Extensions     extensions_;
 
   auto ProcessWord(const std::string_view, State&) -> void;

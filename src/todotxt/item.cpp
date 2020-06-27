@@ -22,7 +22,19 @@ using std::string_view;
 using std::unordered_map;
 using std::vector;
 
-Item::Item(const string rawinput) : raw_{rawinput} {
+Item::Item(const string rawinput)
+    : raw_{rawinput},
+      complete_{false},
+      priority_{0},
+      contexts_{},
+      tags_{},
+      date_completed_{},
+      date_added_{},
+      due_date_{},
+      threshold_date_{},
+      hidden_{false},
+      recurrance_{},
+      extensions_{} {
   using ssize_t = std::string::size_type;
 
   if (rawinput.length() == 0) {
@@ -42,9 +54,9 @@ Item::Item(const string rawinput) : raw_{rawinput} {
   ssize_t       delim_pos = rawinput.find_first_of(delim, start_pos);
 
   while (string::npos != start_pos || string::npos != delim_pos) {
-    ssize_t          end_pos{delim_pos == string::npos ? rawinput.length() : delim_pos};
-    ssize_t          val_len{end_pos - start_pos};
-    std::string_view val{&rawinput.at(start_pos), val_len};
+    ssize_t     end_pos{delim_pos == string::npos ? rawinput.length() : delim_pos};
+    ssize_t     val_len{end_pos - start_pos};
+    string_view val{&rawinput.at(start_pos), val_len};
     // string val = rawinput.substr(start_pos, end_pos);
 
     ProcessWord(val, loop_state);
@@ -81,7 +93,7 @@ auto Item::ProcessWord(const string_view val, Item::State& loop_state) -> void {
   }
 }
 
-auto Item::ProcessBody(const std::string_view item) -> void {
+auto Item::ProcessBody(const string_view item) -> void {
   switch (item.at(0)) {
     case '@': {
       string_view ctx{&item.at(1), item.length() - 1};
@@ -102,18 +114,31 @@ auto Item::ProcessBody(const std::string_view item) -> void {
       if (colon_pos != string::npos) {
         auto key = item.substr(0, colon_pos);
         auto val = item.substr(colon_pos + 1);
+
+        if (key == "h" && val == "1") {
+          hidden_ = true;
+          return;
+        } else if (key == "due" && ProcessDate(val, due_date_)) {
+          return;
+        } else if (key == "t" && ProcessDate(val, threshold_date_)) {
+          return;
+        } else if (key == "rec") {
+          recurrance_ = val;
+          return;
+        }
+
         extensions_.emplace_back(key, val);
       }
   }
 }
 
-auto Item::ProcessDate(const std::string_view val, string& target_date) -> bool {
+auto Item::ProcessDate(const string_view val, string& target_date) -> bool {
   if (val.length() != 10) {
     return false;
   }
 
   for (int i = 0; i < val.length(); i++) {
-    switch (i){
+    switch (i) {
       case 5:
         if (val[i] < '0' || val[i] > '1') {
           return false;
@@ -188,6 +213,22 @@ auto Item::date_completed() const -> const string& {
 
 auto Item::date_added() const -> const string& {
   return date_added_;
+}
+
+auto Item::due_date() const -> const string& {
+  return due_date_;
+}
+
+auto Item::threshold_date() const -> const string& {
+  return threshold_date_;
+}
+
+auto Item::hidden() const -> bool {
+  return hidden_;
+}
+
+auto Item::recurrance() const -> const string& {
+  return recurrance_;
 }
 
 auto Item::extensions() const -> const Extensions& {
