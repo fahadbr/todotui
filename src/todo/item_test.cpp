@@ -1,6 +1,6 @@
 #include "item.h"
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 TEST(Item, TestMixed) {
   todo::Item test_item{"(A) 2020-06-11 this is a @context and this is a +tag h:1"};

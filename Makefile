@@ -2,7 +2,10 @@
 .PHONY : clean todotui cache
 
 todotui: compile_commands.json
-		cmake --build build/
+		cmake --build build/ -- todotui
+
+test: build/CMakeCache.txt
+	cmake --build build/ && cd build && ctest -V
 
 cache: build/CMakeCache.txt
 

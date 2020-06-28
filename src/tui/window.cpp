@@ -1,6 +1,6 @@
 #include "window.h"
 
-#include "todotxt/list.h"
+#include "todo/list.h"
 
 #include <iostream>
 
@@ -45,10 +45,5 @@ void ncurses::DoStuff(todo::List& list) {
   endwin();   // end curses mode
 }
 
-//void ncurses::DoMoreStuff(NCursesWindow* w) {
-  //if (w == nullptr) {
-    //return;
-  //}
-  //// no op
-  //w->CUR_border();
-//}
+void ncurses::DoMoreStuff(todo::List& list) {
+}

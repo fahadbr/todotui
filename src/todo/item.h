@@ -1,5 +1,4 @@
-#ifndef TODOTXT_ITEM_H
-#define TODOTXT_ITEM_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -73,4 +72,3 @@ inline auto ContainsItem(const vector<string>& vec, const std::string_view item)
 }
 
 }  // namespace todo
-#endif /* end of include guard:  */

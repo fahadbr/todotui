@@ -1,9 +1,8 @@
-#ifndef WINDOW_H_U5VPFMQ7
-#define WINDOW_H_U5VPFMQ7
+#pragma once
 
 #include <ncurses.h>
-//#include <cursesw.h>
-#include "todotxt/list.h"
+#include <cursesw.h>
+#include "todo/list.h"
 
 namespace ncurses {
 
@@ -26,9 +25,6 @@ private:
 
 void DoStuff(todo::List& list);
 
-//void DoMoreStuff(NCursesWindow* w);
+void DoMoreStuff(todo::List& list);
 
 } // namespace ncurses
-
-
-#endif /* end of include guard: WINDOW_H_U5VPFMQ7 */

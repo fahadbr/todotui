@@ -1,8 +1,7 @@
-// #include "ncurses/window.h"
 #include <iostream>
 
-#include "todotxt/list.h"
-#include "ncurses/window.h"
+#include "tui/app.h"
+#include "todo/list.h"
 
 void print_file_class();
 
@@ -21,9 +20,10 @@ int main() {
 
 void print_file_class() {
   todo::List mainlist{"/data/syncthing/todo/main.todo.txt"};
-  ncurses::DoStuff(mainlist);
+  // ncurses::DoStuff(mainlist);
 
-  //auto w = NCursesWindow(10, 10, 0, 0);
-  //ncurses::DoMoreStuff(&w);
+  // ncurses::DoMoreStuff(mainlist);
+  auto app = tui::MainApp(std::move(mainlist));
+  app();
 }
 

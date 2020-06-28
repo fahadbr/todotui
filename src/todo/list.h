@@ -1,5 +1,4 @@
-#ifndef TODOTXT_LIST_H
-#define TODOTXT_LIST_H
+#pragma once
 
 #include <fstream>
 #include <string>
@@ -35,4 +34,3 @@ class List {
 };
 
 }  // namespace todo
-#endif /* end of include guard:  */
