@@ -11,6 +11,7 @@
 #include <cursesm.h>
 
 #include <string>
+#include <iostream>
 
 using namespace tui;
 using namespace std;
@@ -25,7 +26,7 @@ int MainApp::titlesize() const {
 }
 
 void MainApp::title() {
-  const string titleText = "todotui in C++";
+  const string titleText = "NCURSES Todotui in C++";
   titleWindow->bkgd(screen_titles());
   titleWindow->addstr(0, (titleWindow->cols() - titleText.size()) / 2, titleText.c_str());
   titleWindow->noutrefresh();
@@ -43,9 +44,25 @@ int MainApp::run() {
   // empty terminating item
   menu_items[i] = new NCursesMenuItem();
 
-  NCursesMenu menu{menu_items, true, true};
+  int x, y;
+  getmaxyx(stdscr, y, x);
+
+  NCursesMenu menu{menu_items,
+    y-2, x*2/3, 1, 1,
+    false, true};
+
+  auto subw = NCursesWindow(menu, true);
+  menu.setSubWindow(subw);
+
+  //menu.setSubWindow(nullptr);
+  //menu.subWindow().wresize(LINES, COLS);
+  menu.set_format(x-2, 1);
+  menu.box();
+  //menu.refresh();
+
   menu();
   // int ch = getch();
 
+  cerr << "max x, y = " << x << ", " << y << endl;
   return 0;
 }

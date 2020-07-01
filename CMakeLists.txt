@@ -16,7 +16,6 @@ project(todotui VERSION 0.1.0 LANGUAGES CXX)
 get_filename_component(TODOTUI_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src ABSOLUTE)
 
 find_package(GTest CONFIG REQUIRED)
-find_package(ncursesw CONFIG REQUIRED)
 find_package(ncurses++w CONFIG REQUIRED)
 
 add_executable(todotui src/main.cpp)

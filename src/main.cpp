@@ -9,9 +9,12 @@ int main() {
   try {
     print_file_class();
   } catch (std::exception& ex) {
-    std::cerr << "got exception: " << ex.what();
+    std::cerr << "got exception: " << ex.what() << std::endl;
+  } catch (NCursesException& ex) {
+    std::cerr << "got ncurses exception: " << ex.message << std::endl;
+    std::cerr << "code: " << ex.errorno << std::endl;
   } catch (...) {
-    std::cerr << "caught exception.. exiting..\n";
+    std::cerr << "caught unknown exception.. exiting..\n";
     return 1;
   }
 
