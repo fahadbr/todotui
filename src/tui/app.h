@@ -10,14 +10,17 @@ class MainApp : public NCursesApplication {
  private:
   todo::List list_;
 
+  auto CreateMenu() -> void;
+
  protected:
-  int  titlesize() const;
-  void title();
+  auto titlesize() const -> int override;
+  auto title() -> void override;
 
  public:
   MainApp(todo::List list);
   ~MainApp();
-  int run();
+
+  auto run() -> int override;
 };
 
 }  // namespace tui

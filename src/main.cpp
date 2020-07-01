@@ -23,9 +23,7 @@ int main() {
 
 void print_file_class() {
   todo::List mainlist{"/data/syncthing/todo/main.todo.txt"};
-  // ncurses::DoStuff(mainlist);
 
-  // ncurses::DoMoreStuff(mainlist);
   auto app = tui::MainApp(std::move(mainlist));
   app();
 }
