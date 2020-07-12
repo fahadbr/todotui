@@ -23,18 +23,18 @@ using std::unordered_map;
 using std::vector;
 
 Item::Item(const string rawinput)
-    : raw_{rawinput},
-      complete_{false},
-      priority_{0},
-      contexts_{},
-      tags_{},
-      date_completed_{},
-      date_added_{},
-      due_date_{},
-      threshold_date_{},
-      hidden_{false},
-      recurrance_{},
-      extensions_{} {
+    : m_raw{rawinput},
+      m_complete{false},
+      m_priority{0},
+      m_contexts{},
+      m_tags{},
+      m_date_completed{},
+      m_date_added{},
+      m_due_date{},
+      m_threshold_date{},
+      m_hidden{false},
+      m_recurrance{},
+      m_extensions{} {
   using ssize_t = std::string::size_type;
 
   if (rawinput.length() == 0) {
@@ -42,15 +42,15 @@ Item::Item(const string rawinput)
   }
 
   if (rawinput.at(0) == 'x') {
-    complete_ = true;
+    m_complete = true;
   }
 
   // if we see a completion marker, first look for the completion date
   // otherwise look for the priority
-  State loop_state{complete_ ? kDateCompleted : kPriority};
+  State loop_state{m_complete ? kDateCompleted : kPriority};
 
   const uint8_t delim     = ' ';
-  ssize_t       start_pos = rawinput.find_first_not_of(delim, complete_ ? 1 : 0);
+  ssize_t       start_pos = rawinput.find_first_not_of(delim, m_complete ? 1 : 0);
   ssize_t       delim_pos = rawinput.find_first_of(delim, start_pos);
 
   while (string::npos != start_pos || string::npos != delim_pos) {
@@ -71,20 +71,20 @@ auto Item::ProcessWord(const string_view val, Item::State& loop_state) -> void {
   switch (loop_state) {
     case kDateCompleted:
       loop_state = kPriority;
-      if (ProcessDate(val, date_completed_)) {
+      if (ProcessDate(val, m_date_completed)) {
         break;
       }
     case kPriority:
       loop_state = kDateAdded;
       // Check for priority
       if (val.length() == 3 && val[0] == '(' && val[2] == ')') {
-        priority_ = val[1];
+        m_priority = val[1];
         // cout << rawinput << '\n';
         break;
       }
     case kDateAdded:
       loop_state = kBody;
-      if (ProcessDate(val, date_added_)) {
+      if (ProcessDate(val, m_date_added)) {
         break;
       }
     case kBody:
@@ -97,15 +97,15 @@ auto Item::ProcessBody(const string_view item) -> void {
   switch (item.at(0)) {
     case '@': {
       string_view ctx{&item.at(1), item.length() - 1};
-      if (!ContainsItem(contexts_, ctx)) {
-        contexts_.emplace_back(ctx);
+      if (!ContainsItem(m_contexts, ctx)) {
+        m_contexts.emplace_back(ctx);
       }
       break;
     }
     case '+': {
       string_view tag{&item.at(1), item.length() - 1};
-      if (!ContainsItem(tags_, tag)) {
-        tags_.emplace_back(tag);
+      if (!ContainsItem(m_tags, tag)) {
+        m_tags.emplace_back(tag);
       }
       break;
     }
@@ -116,18 +116,18 @@ auto Item::ProcessBody(const string_view item) -> void {
         auto val = item.substr(colon_pos + 1);
 
         if (key == "h" && val == "1") {
-          hidden_ = true;
+          m_hidden = true;
           return;
-        } else if (key == "due" && ProcessDate(val, due_date_)) {
+        } else if (key == "due" && ProcessDate(val, m_due_date)) {
           return;
-        } else if (key == "t" && ProcessDate(val, threshold_date_)) {
+        } else if (key == "t" && ProcessDate(val, m_threshold_date)) {
           return;
         } else if (key == "rec") {
-          recurrance_ = val;
+          m_recurrance = val;
           return;
         }
 
-        extensions_.emplace_back(key, val);
+        m_extensions.emplace_back(key, val);
       }
   }
 }
@@ -166,71 +166,24 @@ auto Item::ProcessDate(const string_view val, string& target_date) -> bool {
 }
 
 auto Item::PrintString() -> void {
-  cout << "raw: " << raw_ << '\n';
-  cout << "complete: " << complete_ << "\n";
-  cout << "date_completed: " << date_completed_ << "\n";
-  cout << "priority: " << priority_ << '\n';
-  cout << "date_added: " << date_added_ << "\n";
+  cout << "raw: " << m_raw << '\n';
+  cout << "complete: " << m_complete << "\n";
+  cout << "date_completed: " << m_date_completed << "\n";
+  cout << "priority: " << m_priority << '\n';
+  cout << "date_added: " << m_date_added << "\n";
 
   cout << "contexts: ";
-  std::copy(contexts_.begin(), contexts_.end(), std::ostream_iterator<string>(cout, " "));
+  std::copy(m_contexts.begin(), m_contexts.end(), std::ostream_iterator<string>(cout, " "));
   cout << '\n';
 
   cout << "tags: ";
-  std::copy(tags_.begin(), tags_.end(), std::ostream_iterator<string>(cout, " "));
+  std::copy(m_tags.begin(), m_tags.end(), std::ostream_iterator<string>(cout, " "));
   cout << "\n";
 
   cout << "extensions: ";
-  for (auto& p : extensions_) {
+  for (auto& p : m_extensions) {
     cout << p.first << ":" << p.second << " ";
   }
   cout << "\n\n";
 }
 
-auto Item::raw() const -> const string& {
-  return raw_;
-}
-
-auto Item::complete() const -> bool {
-  return complete_;
-}
-
-auto Item::priority() const -> char {
-  return priority_;
-}
-
-auto Item::contexts() const -> const vector<string>& {
-  return contexts_;
-}
-
-auto Item::tags() const -> const vector<string>& {
-  return tags_;
-}
-
-auto Item::date_completed() const -> const string& {
-  return date_completed_;
-}
-
-auto Item::date_added() const -> const string& {
-  return date_added_;
-}
-
-auto Item::due_date() const -> const string& {
-  return due_date_;
-}
-
-auto Item::threshold_date() const -> const string& {
-  return threshold_date_;
-}
-
-auto Item::hidden() const -> bool {
-  return hidden_;
-}
-
-auto Item::recurrance() const -> const string& {
-  return recurrance_;
-}
-
-auto Item::extensions() const -> const Extensions& {
-  return extensions_;
-}

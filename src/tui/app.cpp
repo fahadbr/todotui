@@ -32,19 +32,13 @@ auto MainApp::title() -> void {
   titleWindow->noutrefresh();
 }
 
-auto PrintItem(NCursesMenuItem& i) -> bool {
-  ::move(LINES - 1, 1);
-  ::clrtoeol();
-  ::mvprintw(LINES - 1, 1, i.name());
-  return false;
-}
 
 auto MainApp::CreateMenu() -> void {
   NCursesMenuItem** menu_items = new NCursesMenuItem*[list_.items().size() + 1];
 
   size_t i{0};
   for (auto& todo_item : list_.items()) {
-    menu_items[i] = new NCursesMenuCallbackItem(&PrintItem, todo_item.raw().c_str());
+    menu_items[i] = new NCursesMenuCallbackItem(&MainApp::PrintItem, todo_item.raw().c_str());
     // menu_items[i] = new NCursesMenuItem(todo_item.raw().c_str());
     i++;
   }
@@ -53,7 +47,7 @@ auto MainApp::CreateMenu() -> void {
   menu_items[i] = new NCursesMenuItem();
 
   int x, y;
-  getmaxyx(stdscr, y, x);
+  ::getmaxyx(stdscr, y, x);
 
   NCursesMenu menu{menu_items, y - 2, x * 2 / 3, 1, 1, false, true};
 
@@ -72,9 +66,14 @@ auto MainApp::CreateMenu() -> void {
 
 auto MainApp::run() -> int {
   int x, y;
-  getmaxyx(stdscr, y, x);
+  ::getmaxyx(stdscr, y, x);
 
-  auto smallwin = NCursesPanel(y - 2, x * 1 / 3 - 2, 1, x * 2 / 3 + 2);
+  auto height = y - 2;
+  auto width  = x * 1 / 3 - 2;
+  auto xpos   = x * 2 / 3 + 2;
+  auto ypos   = 1;
+
+  auto smallwin = NCursesPanel(height, width, ypos, xpos);
   smallwin.box();
   smallwin.show();
   smallwin.refresh();
@@ -83,3 +82,4 @@ auto MainApp::run() -> int {
 
   return 0;
 }
+

@@ -86,11 +86,6 @@ TEST(Item, TestHidden) {
   EXPECT_FALSE(nonhidden_item.hidden());
 }
 
-// TEST(Item, TestNotHidden) {
-//  todo::Item nonhidden_item{"(A) 2020-06-11 this is a @ctx and this is another @ctx @context"};
-//  EXPECT_FALSE(nonhidden_item.hidden());
-//}
-
 TEST(Item, TestRecurrance) {
   todo::Item test_item{"(A) 2020-06-11 this is a @ctx and this is another @ctx @context rec:2w"};
   EXPECT_EQ(test_item.recurrance(), "2w");
